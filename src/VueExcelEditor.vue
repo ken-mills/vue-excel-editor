@@ -155,6 +155,7 @@
                       @blur="inputBoxBlur"
                       @mousemove="inputBoxMouseMove"
                       @mousedown="inputBoxMouseDown"
+                      @contextmenu.prevent="inputBoxContextMenu"
                       trim
                       autocomplete="off"
                       autocorrect="off"
@@ -783,7 +784,7 @@ export default {
               filter[k] = {type: 8, value: '^' + this.columnFilter[k].replace(/\*/g, '.*').replace(/\?/g, '.').trim() + '$'}
               break
             case this.columnFilter[k].startsWith('|'):
-              filter[k] = {type: 10, value: this.columnFilter[k].slice(1).trim()}
+              filter[k] = {type: 10, value: this.columnFilter[k].slice(1).trim().toUpperCase()}
               break
             default:
               filter[k] = {type: 5, value: this.columnFilter[k].trim().toUpperCase()}
@@ -850,9 +851,7 @@ export default {
                   if (`${content[k]}` === `${filter[k].value}`) return false
                   break
                 case 10:
-                   console.debug('haystack: ', content[k])
-                   console.debug('test: ', new RegExp(filter[k].value).test(content[k]))
-                  if (!new RegExp(filter[k].value).test(content[k])) return false
+                  if (!new RegExp(filter[k].value, 'i').test(content[k])) return false
                   break
               }
             }
@@ -2278,6 +2277,9 @@ export default {
         && e.target.offsetWidth - e.offsetX < 15)
         cursor = 'pointer'
       e.target.style.cursor = cursor
+    },
+    inputBoxContextMenu (){
+        this.$emit('cellRightClick',this.currentRecord)
     },
     inputBoxMouseDown (e) {
       if (e.target.offsetWidth - e.offsetX > 15) return

@@ -208,7 +208,7 @@ export default {
         opt = this.inputFilterCondition + this.selectedFilters[0]
       } else {
         if (this.inputFilterCondition === '|') {
-          opt = "|" + this.selectedFilters.join("|").toUpperCase()
+          opt = "|" + this.selectedFilters.join("|")
         }
       }
       this.columnFilterRef.$el.textContent = opt
@@ -512,7 +512,7 @@ div.panel-title span, button.panel-button span {
 }
 
 .filter-msg-container {
-  min-height: 2rem;
+  min-height: 50%;
   margin-top: 10px;
   margin-left: 10px;
 }
